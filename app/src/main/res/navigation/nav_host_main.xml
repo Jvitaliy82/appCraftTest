@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/listFragment"
-        android:name="com.jdeveloperapps.appcrafttest.ui.fragments.ListFragment"
+        android:name="com.jdeveloperapps.appcrafttest.ui.fragments.list.ListFragment"
         android:label="fragment_list"
         tools:layout="@layout/fragment_list" />
     <fragment
