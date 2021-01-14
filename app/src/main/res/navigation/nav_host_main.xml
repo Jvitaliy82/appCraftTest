@@ -9,7 +9,11 @@
         android:id="@+id/listFragment"
         android:name="com.jdeveloperapps.appcrafttest.ui.fragments.list.ListFragment"
         android:label="fragment_list"
-        tools:layout="@layout/fragment_list" />
+        tools:layout="@layout/fragment_list" >
+        <action
+            android:id="@+id/action_listFragment_to_detailFragment"
+            app:destination="@id/detailFragment" />
+    </fragment>
     <fragment
         android:id="@+id/savedFragment"
         android:name="com.jdeveloperapps.appcrafttest.ui.fragments.SavedFragment"
@@ -20,4 +24,13 @@
         android:name="com.jdeveloperapps.appcrafttest.ui.fragments.LocationFragment"
         android:label="fragment_location"
         tools:layout="@layout/fragment_location" />
+    <fragment
+        android:id="@+id/detailFragment"
+        android:name="com.jdeveloperapps.appcrafttest.ui.fragments.detail.DetailFragment"
+        android:label="fragment_detail"
+        tools:layout="@layout/fragment_detail" >
+        <argument
+            android:name="album"
+            app:argType="com.jdeveloperapps.appcrafttest.models.Album" />
+    </fragment>
 </navigation>

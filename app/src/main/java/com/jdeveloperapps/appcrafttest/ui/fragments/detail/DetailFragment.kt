@@ -1,4 +1,4 @@
-package com.jdeveloperapps.appcrafttest.ui.fragments.list
+package com.jdeveloperapps.appcrafttest.ui.fragments.detail
 
 import android.os.Bundle
 import android.view.View
@@ -6,68 +6,50 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.DividerItemDecoration
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import com.jdeveloperapps.appcrafttest.R
+import com.jdeveloperapps.appcrafttest.databinding.FragmentDetailBinding
 import com.jdeveloperapps.appcrafttest.databinding.FragmentListBinding
-import com.jdeveloperapps.appcrafttest.models.Album
 import com.jdeveloperapps.appcrafttest.util.exhaustive
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 
-
 @AndroidEntryPoint
-class ListFragment : Fragment(R.layout.fragment_list), ListAlbumAdapter.OnItemClickListener {
+class DetailFragment : Fragment(R.layout.fragment_detail) {
 
-    private var _binding: FragmentListBinding? = null
+    private var _binding: FragmentDetailBinding? = null
     private val binding get() = _binding!!
 
-    private val viewModel by viewModels<ListViewModel>()
-    private val adapter = ListAlbumAdapter(this)
+    private val viewModel by viewModels<DetailViewModel>()
+    private val adapter = DetailAlbumAdapter()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        _binding = FragmentListBinding.bind(view)
+        _binding = FragmentDetailBinding.bind(view)
 
         binding.apply {
             recyclerView.adapter = adapter
-            recyclerView.addItemDecoration(
-                DividerItemDecoration(
-                    activity,
-                    LinearLayoutManager.VERTICAL
-                )
-            )
         }
 
-        viewModel.albums.observe(viewLifecycleOwner) {
+        viewModel.listPhoto.observe(viewLifecycleOwner) {
             adapter.submitList(it)
         }
 
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
-            viewModel.listEvent.collect { event ->
+            binding.nameAlbum.text = viewModel.album!!.title
+            viewModel.detailEvent.collect { event ->
                 when (event) {
-                    is ListViewModel.ListEvent.ShowProgressBar -> {
+                    is DetailViewModel.DetailEvent.ShowProgressBar -> {
                         showProgressBar(event.visible)
                     }
-                    is ListViewModel.ListEvent.ShowMessage -> {
+                    is DetailViewModel.DetailEvent.ShowMessage -> {
                         showMessage(event.message)
-                    }
-                    is ListViewModel.ListEvent.NavigateToDetailFragment -> {
-                        val action = ListFragmentDirections.actionListFragmentToDetailFragment(event.album)
-                        findNavController().navigate(action)
                     }
                 }.exhaustive
             }
         }
 
-        viewModel.getAlbums()
-    }
-
-    override fun onItemClick(album: Album) {
-        viewModel.onItemSelected(album)
+        viewModel.getPhotos()
     }
 
     private fun showProgressBar(visible: Boolean) {

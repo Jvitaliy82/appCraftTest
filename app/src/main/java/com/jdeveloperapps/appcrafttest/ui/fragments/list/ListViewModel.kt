@@ -10,9 +10,9 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 
-class ListViewModel @ViewModelInject constructor(private val api: AlbumsApi): ViewModel() {
+class ListViewModel @ViewModelInject constructor(private val api: AlbumsApi) : ViewModel() {
 
-    val albums : MutableLiveData<List<Album>> = MutableLiveData()
+    val albums: MutableLiveData<List<Album>> = MutableLiveData()
 
     private val listEventChannel = Channel<ListEvent>()
     val listEvent = listEventChannel.receiveAsFlow()
@@ -34,9 +34,14 @@ class ListViewModel @ViewModelInject constructor(private val api: AlbumsApi): Vi
         listEventChannel.send(ListEvent.ShowProgressBar(false))
     }
 
+    fun onItemSelected(album: Album) = viewModelScope.launch {
+        listEventChannel.send(ListEvent.NavigateToDetailFragment(album))
+    }
+
     sealed class ListEvent {
         data class ShowProgressBar(val visible: Boolean) : ListEvent()
         data class ShowMessage(val message: String) : ListEvent()
+        data class NavigateToDetailFragment(val album: Album) : ListEvent()
     }
 
 }

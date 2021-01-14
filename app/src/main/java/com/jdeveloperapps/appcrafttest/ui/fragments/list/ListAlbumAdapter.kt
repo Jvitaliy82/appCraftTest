@@ -1,17 +1,21 @@
-package com.jdeveloperapps.appcrafttest.adapters
+package com.jdeveloperapps.appcrafttest.ui.fragments.list
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.jdeveloperapps.appcrafttest.databinding.ItemAlbumRecyclerBinding
+import com.jdeveloperapps.appcrafttest.databinding.ItemListAlbumRecyclerBinding
 import com.jdeveloperapps.appcrafttest.models.Album
 
-class ListAlbumAdapter : ListAdapter<Album, ListAlbumAdapter.AlbumViewHolder>(DiffCallback()) {
+class ListAlbumAdapter(private val listener: OnItemClickListener) :
+    ListAdapter<Album, ListAlbumAdapter.AlbumViewHolder>(
+        DiffCallback()
+    ) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AlbumViewHolder {
-        val binding = ItemAlbumRecyclerBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val binding =
+            ItemListAlbumRecyclerBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return AlbumViewHolder(binding)
     }
 
@@ -20,8 +24,18 @@ class ListAlbumAdapter : ListAdapter<Album, ListAlbumAdapter.AlbumViewHolder>(Di
         holder.bind(currentItem)
     }
 
-    inner class AlbumViewHolder(private val binding: ItemAlbumRecyclerBinding) :
+    inner class AlbumViewHolder(private val binding: ItemListAlbumRecyclerBinding) :
         RecyclerView.ViewHolder(binding.root) {
+
+        init {
+            binding.root.setOnClickListener {
+                val position = adapterPosition
+                if (position != RecyclerView.NO_POSITION) {
+                    val album = getItem(position)
+                    listener.onItemClick(album)
+                }
+            }
+        }
 
         fun bind(album: Album) {
             binding.apply {
@@ -37,5 +51,9 @@ class ListAlbumAdapter : ListAdapter<Album, ListAlbumAdapter.AlbumViewHolder>(Di
         override fun areContentsTheSame(oldItem: Album, newItem: Album) =
             oldItem == newItem
 
+    }
+
+    interface OnItemClickListener {
+        fun onItemClick(album: Album)
     }
 }

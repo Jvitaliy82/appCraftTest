@@ -84,6 +84,9 @@ dependencies {
     // Retrofit + GSON
     implementation "com.squareup.retrofit2:retrofit:$retrofitVersion"
     implementation "com.squareup.retrofit2:converter-gson:$retrofitVersion"
+
+    //Coil
+    implementation "io.coil-kt:coil:$koilVersion"
 }
 kapt {
     correctErrorTypes true
