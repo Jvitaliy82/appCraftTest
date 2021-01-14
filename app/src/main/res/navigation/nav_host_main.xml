@@ -21,7 +21,7 @@
         tools:layout="@layout/fragment_saved" />
     <fragment
         android:id="@+id/locationFragment"
-        android:name="com.jdeveloperapps.appcrafttest.ui.fragments.LocationFragment"
+        android:name="com.jdeveloperapps.appcrafttest.ui.fragments.location.LocationFragment"
         android:label="fragment_location"
         tools:layout="@layout/fragment_location" />
     <fragment

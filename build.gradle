@@ -12,13 +12,15 @@ buildscript {
         hiltAndroidXVersion = "1.0.0-alpha02"
         retrofitVersion = '2.9.0'
         koilVersion = '1.1.0'
+        locationService = '17.1.0'
+        easyPermissions = '3.0.0'
     }
     repositories {
         google()
         jcenter()
     }
     dependencies {
-        classpath "com.android.tools.build:gradle:4.1.1"
+        classpath 'com.android.tools.build:gradle:4.0.2'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath "androidx.navigation:navigation-safe-args-gradle-plugin:$navigationVersion"
         classpath "com.google.dagger:hilt-android-gradle-plugin:$hiltVersion"

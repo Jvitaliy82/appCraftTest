@@ -87,6 +87,12 @@ dependencies {
 
     //Coil
     implementation "io.coil-kt:coil:$koilVersion"
+
+    // Google Maps Location Services
+    implementation "com.google.android.gms:play-services-location:$locationService"
+
+    // Easy Permissions
+    implementation "pub.devrel:easypermissions:$easyPermissions"
 }
 kapt {
     correctErrorTypes true
