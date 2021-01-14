@@ -16,7 +16,7 @@
     </fragment>
     <fragment
         android:id="@+id/savedFragment"
-        android:name="com.jdeveloperapps.appcrafttest.ui.fragments.SavedFragment"
+        android:name="com.jdeveloperapps.appcrafttest.ui.fragments.saved.SavedFragment"
         android:label="fragment_saved"
         tools:layout="@layout/fragment_saved" />
     <fragment

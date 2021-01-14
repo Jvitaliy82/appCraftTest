@@ -29,6 +29,7 @@ class DetailFragment : Fragment(R.layout.fragment_detail) {
 
         binding.apply {
             recyclerView.adapter = adapter
+            fab.setOnClickListener { viewModel.onFabClicked() }
         }
 
         viewModel.listPhoto.observe(viewLifecycleOwner) {
@@ -44,6 +45,15 @@ class DetailFragment : Fragment(R.layout.fragment_detail) {
                     }
                     is DetailViewModel.DetailEvent.ShowMessage -> {
                         showMessage(event.message)
+                    }
+                    is DetailViewModel.DetailEvent.ShowMessageSaved -> {
+                        Snackbar.make(
+                            requireView(),
+                            resources.getString(R.string.album_saved),
+                            Snackbar.LENGTH_LONG
+                        ).setAction(resources.getString(android.R.string.cancel)) {
+                            viewModel.undoSavedClick(event.album)
+                        }.show()
                     }
                 }.exhaustive
             }

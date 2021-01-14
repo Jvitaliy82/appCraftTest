@@ -3,4 +3,5 @@
     <string name="albums">Albums</string>
     <string name="saved">Saved</string>
     <string name="location">Location</string>
+    <string name="album_saved">Album saved</string>
 </resources>
