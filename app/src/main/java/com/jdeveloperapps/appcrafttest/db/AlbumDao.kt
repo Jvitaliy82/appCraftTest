@@ -1,13 +1,15 @@
 package com.jdeveloperapps.appcrafttest.db
 
-import androidx.room.Dao
-import androidx.room.Delete
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
+import androidx.lifecycle.LiveData
+import androidx.room.*
 import com.jdeveloperapps.appcrafttest.models.Album
 
 @Dao
 interface AlbumDao {
+
+    @Query("SELECT * from album_table")
+    fun getAllAlbum() : LiveData<List<Album>>
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertAlbum(album: Album)
 

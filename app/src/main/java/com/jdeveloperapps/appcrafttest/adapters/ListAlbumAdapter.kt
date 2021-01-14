@@ -1,4 +1,4 @@
-package com.jdeveloperapps.appcrafttest.ui.fragments.list
+package com.jdeveloperapps.appcrafttest.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

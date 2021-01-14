@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import com.jdeveloperapps.appcrafttest.R
+import com.jdeveloperapps.appcrafttest.adapters.ListAlbumAdapter
 import com.jdeveloperapps.appcrafttest.databinding.FragmentListBinding
 import com.jdeveloperapps.appcrafttest.models.Album
 import com.jdeveloperapps.appcrafttest.util.exhaustive
