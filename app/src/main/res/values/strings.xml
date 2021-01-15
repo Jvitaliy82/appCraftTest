@@ -5,4 +5,5 @@
     <string name="location">Location</string>
     <string name="album_saved">Album saved</string>
     <string name="album_deleted">Album deleted</string>
+    <string name="your_coordinates_will_appear_here">Your coordinates will appear here</string>
 </resources>

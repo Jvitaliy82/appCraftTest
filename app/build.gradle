@@ -95,6 +95,7 @@ dependencies {
 
     // Google Maps Location Services
     implementation "com.google.android.gms:play-services-location:$locationService"
+    implementation 'com.google.android.gms:play-services-maps:17.0.0'
 
     // Easy Permissions
     implementation "pub.devrel:easypermissions:$easyPermissions"

@@ -17,7 +17,7 @@
         android:id="@+id/text_location"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Location Fragment"
+        android:text="@string/your_coordinates_will_appear_here"
         android:layout_centerInParent="true"/>
 
 </RelativeLayout>
