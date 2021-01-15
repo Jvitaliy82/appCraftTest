@@ -1,6 +1,7 @@
 package com.jdeveloperapps.appcrafttest.ui.fragments.location
 
 import android.Manifest
+import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.view.View
@@ -9,6 +10,8 @@ import androidx.fragment.app.viewModels
 import com.jdeveloperapps.appcrafttest.R
 import com.jdeveloperapps.appcrafttest.databinding.FragmentListBinding
 import com.jdeveloperapps.appcrafttest.databinding.FragmentLocationBinding
+import com.jdeveloperapps.appcrafttest.services.TrackingService
+import com.jdeveloperapps.appcrafttest.util.Constants.ACTION_START_OR_RESUME_SERVICE
 import com.jdeveloperapps.appcrafttest.util.Constants.REQUEST_CODE_LOCATION_PERMISSIONS
 import com.jdeveloperapps.appcrafttest.util.TrackingUtility
 import dagger.hilt.android.AndroidEntryPoint
@@ -31,9 +34,16 @@ class LocationFragment : Fragment(R.layout.fragment_location), EasyPermissions.P
         binding.apply {
             button_start_stop.setOnClickListener {
                 requestPermissions()
+                sendCommandToService(ACTION_START_OR_RESUME_SERVICE)
             }
         }
     }
+    
+    private fun sendCommandToService(action: String) =
+        Intent(requireContext(), TrackingService::class.java).also {
+            it.action = action
+            requireContext().startService(it)
+        }
 
     private fun requestPermissions() {
         if (TrackingUtility.hasLocationPermission(requireContext())) {

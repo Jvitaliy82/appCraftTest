@@ -1,10 +1,12 @@
 package com.jdeveloperapps.appcrafttest.ui
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.setupWithNavController
 import com.jdeveloperapps.appcrafttest.R
+import com.jdeveloperapps.appcrafttest.util.Constants.ACTION_SHOW_LOCATION_FRAGMENT
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -15,6 +17,19 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        navigateToLocationFragmentIfNeeded(intent)
+
         bottom_menu.setupWithNavController(main_nav_host_fragment.findNavController())
+    }
+
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
+        navigateToLocationFragmentIfNeeded(intent)
+    }
+
+    private fun navigateToLocationFragmentIfNeeded(intent: Intent?) {
+        if (intent?.action == ACTION_SHOW_LOCATION_FRAGMENT) {
+            main_nav_host_fragment.findNavController().navigate(R.id.action_global_locationFragment)
+        }
     }
 }
