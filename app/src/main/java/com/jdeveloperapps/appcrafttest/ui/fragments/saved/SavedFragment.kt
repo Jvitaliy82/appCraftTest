@@ -2,10 +2,8 @@ package com.jdeveloperapps.appcrafttest.ui.fragments.saved
 
 import android.os.Bundle
 import android.view.View
-import android.widget.ListAdapter
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.ItemTouchHelper
@@ -15,7 +13,6 @@ import com.google.android.material.snackbar.Snackbar
 import com.jdeveloperapps.appcrafttest.R
 import com.jdeveloperapps.appcrafttest.adapters.ListAlbumAdapter
 import com.jdeveloperapps.appcrafttest.databinding.FragmentSavedBinding
-import com.jdeveloperapps.appcrafttest.db.AlbumDao
 import com.jdeveloperapps.appcrafttest.models.Album
 import com.jdeveloperapps.appcrafttest.util.exhaustive
 import dagger.hilt.android.AndroidEntryPoint
@@ -74,7 +71,7 @@ class SavedFragment (): Fragment(R.layout.fragment_saved), ListAlbumAdapter.OnIt
                             resources.getString(R.string.album_deleted),
                             Snackbar.LENGTH_LONG
                         ).setAction(resources.getString(android.R.string.cancel)) {
-                            viewModel.undoDeleteClick(event.album)
+                            viewModel.undoDeleteClick(event.album, event.listAlbumDetail)
                         }.show()
                     }
                 }.exhaustive

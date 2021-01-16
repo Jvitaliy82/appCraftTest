@@ -41,7 +41,9 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
         android:layout_margin="16dp"
+        android:contentDescription="@string/app_name"
         android:src="@drawable/ic_save"
-        android:contentDescription="@string/app_name" />
+        android:visibility="gone"
+        tools:visibility="visible" />
 
 </RelativeLayout>

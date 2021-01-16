@@ -33,6 +33,7 @@ class DetailViewModel @ViewModelInject constructor(
             if (response.isSuccessful) {
                 response.body()?.let { body ->
                     listPhoto.postValue(body)
+                    detailEventChannel.send(DetailEvent.ShowSavedButton(true))
                 }
             } else {
                 detailEventChannel.send(DetailEvent.ShowMessage("Неудалось загрузить"))
@@ -44,17 +45,18 @@ class DetailViewModel @ViewModelInject constructor(
     }
 
     fun onFabClicked() = viewModelScope.launch {
-        albumDao.insertAlbum(album!!)
-        detailEventChannel.send(DetailEvent.ShowMessageSaved(album))
+        albumDao.insertAlbum(album!!, listPhoto.value!!)
+        detailEventChannel.send(DetailEvent.ShowMessageSaved(album, listPhoto.value!!))
     }
 
-    fun undoSavedClick(album: Album) = viewModelScope.launch {
-        albumDao.deleteAlbum(album)
+    fun undoSavedClick(album: Album, listAlbum: List<AlbumDetail>) = viewModelScope.launch {
+        albumDao.deleteAlbum(album, listAlbum)
     }
 
     sealed class DetailEvent {
         data class ShowProgressBar(val visible: Boolean) : DetailEvent()
         data class ShowMessage(val message: String) : DetailEvent()
-        data class ShowMessageSaved(val album: Album) : DetailEvent()
+        data class ShowMessageSaved(val album: Album, val listAlbum: List<AlbumDetail>) : DetailEvent()
+        data class ShowSavedButton(val visible: Boolean) : DetailEvent()
     }
 }

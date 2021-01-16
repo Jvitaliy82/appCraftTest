@@ -52,8 +52,11 @@ class DetailFragment : Fragment(R.layout.fragment_detail) {
                             resources.getString(R.string.album_saved),
                             Snackbar.LENGTH_LONG
                         ).setAction(resources.getString(android.R.string.cancel)) {
-                            viewModel.undoSavedClick(event.album)
+                            viewModel.undoSavedClick(event.album, event.listAlbum)
                         }.show()
+                    }
+                    is DetailViewModel.DetailEvent.ShowSavedButton -> {
+                        showSaveButton(event.visible)
                     }
                 }.exhaustive
             }
@@ -64,6 +67,10 @@ class DetailFragment : Fragment(R.layout.fragment_detail) {
 
     private fun showProgressBar(visible: Boolean) {
         binding.progressBar.isVisible = visible
+    }
+
+    private fun showSaveButton(visible: Boolean) {
+        binding.fab.isVisible = visible
     }
 
     private fun showMessage(message: String) {

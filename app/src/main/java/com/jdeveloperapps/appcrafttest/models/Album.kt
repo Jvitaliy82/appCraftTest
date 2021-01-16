@@ -8,6 +8,7 @@ import kotlinx.android.parcel.Parcelize
 @Entity(tableName = "album_table")
 @Parcelize
 data class Album(
+    val userId: Int,
     @PrimaryKey(autoGenerate = false)
     val id: Int,
     val title: String
