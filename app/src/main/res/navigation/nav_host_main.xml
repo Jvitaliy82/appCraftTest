@@ -18,7 +18,11 @@
         android:id="@+id/savedFragment"
         android:name="com.jdeveloperapps.appcrafttest.ui.fragments.saved.SavedFragment"
         android:label="fragment_saved"
-        tools:layout="@layout/fragment_saved" />
+        tools:layout="@layout/fragment_saved" >
+        <action
+            android:id="@+id/action_savedFragment_to_detailFragment"
+            app:destination="@id/detailFragment" />
+    </fragment>
     <fragment
         android:id="@+id/locationFragment"
         android:name="com.jdeveloperapps.appcrafttest.ui.fragments.location.LocationFragment"
@@ -32,6 +36,9 @@
         <argument
             android:name="album"
             app:argType="com.jdeveloperapps.appcrafttest.models.Album" />
+        <argument
+            android:name="fromSaved"
+            app:argType="boolean" />
     </fragment>
     <action
         android:id="@+id/action_global_locationFragment"

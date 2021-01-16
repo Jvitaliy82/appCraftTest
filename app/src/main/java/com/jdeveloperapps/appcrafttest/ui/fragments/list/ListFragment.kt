@@ -57,7 +57,8 @@ class ListFragment : Fragment(R.layout.fragment_list), ListAlbumAdapter.OnItemCl
                         showMessage(event.message)
                     }
                     is ListViewModel.ListEvent.NavigateToDetailFragment -> {
-                        val action = ListFragmentDirections.actionListFragmentToDetailFragment(event.album)
+                        val action = ListFragmentDirections
+                            .actionListFragmentToDetailFragment(event.album, false)
                         findNavController().navigate(action)
                     }
                 }.exhaustive

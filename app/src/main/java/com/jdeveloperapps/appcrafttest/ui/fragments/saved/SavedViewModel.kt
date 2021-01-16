@@ -31,10 +31,15 @@ class SavedViewModel @ViewModelInject constructor(
         albumDao.insertAlbum(album, listAlbumDetail)
     }
 
+    fun onItemClicked(album: Album) = viewModelScope.launch {
+        savedEventChannel.send(SavedEvent.NavigateToDetailFragment(album))
+    }
+
     sealed class SavedEvent {
         data class ShowUndoDeleteMessage(
             val album: Album,
             val listAlbumDetail: List<AlbumDetail>
         ) : SavedEvent()
+        data class NavigateToDetailFragment(val album: Album) : SavedEvent()
     }
 }

@@ -10,6 +10,7 @@ import com.jdeveloperapps.appcrafttest.api.AlbumsApi
 import com.jdeveloperapps.appcrafttest.db.AlbumDao
 import com.jdeveloperapps.appcrafttest.models.Album
 import com.jdeveloperapps.appcrafttest.models.AlbumDetail
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
@@ -20,26 +21,33 @@ class DetailViewModel @ViewModelInject constructor(
     @Assisted state: SavedStateHandle
 ) : ViewModel() {
     val album = state.get<Album>("album")
+    private val fromSaved = state.get<Boolean>("fromSaved")
 
     val listPhoto: MutableLiveData<List<AlbumDetail>> = MutableLiveData()
 
     private val detailEventChannel = Channel<DetailEvent>()
     val detailEvent = detailEventChannel.receiveAsFlow()
 
-    fun getPhotos() = viewModelScope.launch {
+    fun getPhotos() = viewModelScope.launch(Dispatchers.IO) {
         detailEventChannel.send(DetailEvent.ShowProgressBar(true))
-        try {
-            val response = api.getPhotos(album!!.id)
-            if (response.isSuccessful) {
-                response.body()?.let { body ->
-                    listPhoto.postValue(body)
-                    detailEventChannel.send(DetailEvent.ShowSavedButton(true))
+        if (fromSaved!!) {
+            val listAlbumDetail = albumDao.getListAlbumDetailById(album!!.id)
+            listPhoto.postValue(listAlbumDetail)
+            detailEventChannel.send(DetailEvent.ShowSavedButton(!fromSaved))
+        } else {
+            try {
+                val response = api.getPhotos(album!!.id)
+                if (response.isSuccessful) {
+                    response.body()?.let { body ->
+                        listPhoto.postValue(body)
+                        detailEventChannel.send(DetailEvent.ShowSavedButton(!fromSaved))
+                    }
+                } else {
+                    detailEventChannel.send(DetailEvent.ShowMessage("Неудалось загрузить"))
                 }
-            } else {
-                detailEventChannel.send(DetailEvent.ShowMessage("Неудалось загрузить"))
+            } catch (e: Exception) {
+                detailEventChannel.send(DetailEvent.ShowMessage("Ошибка загрузки: ${e.message}"))
             }
-        } catch (e: Exception) {
-            detailEventChannel.send(DetailEvent.ShowMessage("Ошибка загрузки: ${e.message}"))
         }
         detailEventChannel.send(DetailEvent.ShowProgressBar(false))
     }

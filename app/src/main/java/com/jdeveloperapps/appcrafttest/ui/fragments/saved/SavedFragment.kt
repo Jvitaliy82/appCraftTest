@@ -5,6 +5,7 @@ import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -19,11 +20,11 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 
 @AndroidEntryPoint
-class SavedFragment (): Fragment(R.layout.fragment_saved), ListAlbumAdapter.OnItemClickListener {
+class SavedFragment() : Fragment(R.layout.fragment_saved), ListAlbumAdapter.OnItemClickListener {
 
     private val viewModel by viewModels<SavedViewModel>()
 
-    private var _binding : FragmentSavedBinding? = null
+    private var _binding: FragmentSavedBinding? = null
     val binding get() = _binding!!
 
     private val adapter = ListAlbumAdapter(this)
@@ -41,8 +42,10 @@ class SavedFragment (): Fragment(R.layout.fragment_saved), ListAlbumAdapter.OnIt
                 )
             )
 
-            ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(0,
-                ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT) {
+            ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(
+                0,
+                ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT
+            ) {
                 override fun onMove(
                     recyclerView: RecyclerView,
                     viewHolder: RecyclerView.ViewHolder,
@@ -64,7 +67,7 @@ class SavedFragment (): Fragment(R.layout.fragment_saved), ListAlbumAdapter.OnIt
 
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
             viewModel.savedEvent.collect { event ->
-                when(event) {
+                when (event) {
                     is SavedViewModel.SavedEvent.ShowUndoDeleteMessage -> {
                         Snackbar.make(
                             requireView(),
@@ -74,6 +77,12 @@ class SavedFragment (): Fragment(R.layout.fragment_saved), ListAlbumAdapter.OnIt
                             viewModel.undoDeleteClick(event.album, event.listAlbumDetail)
                         }.show()
                     }
+                    is SavedViewModel.SavedEvent.NavigateToDetailFragment -> {
+                        val action =
+                            SavedFragmentDirections
+                                .actionSavedFragmentToDetailFragment(event.album, true)
+                        findNavController().navigate(action)
+                    }
                 }.exhaustive
             }
         }
@@ -81,6 +90,6 @@ class SavedFragment (): Fragment(R.layout.fragment_saved), ListAlbumAdapter.OnIt
     }
 
     override fun onItemClick(album: Album) {
-
+        viewModel.onItemClicked(album)
     }
 }
