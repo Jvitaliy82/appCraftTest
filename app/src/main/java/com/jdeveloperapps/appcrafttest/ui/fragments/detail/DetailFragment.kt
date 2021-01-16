@@ -6,22 +6,24 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
 import com.jdeveloperapps.appcrafttest.R
 import com.jdeveloperapps.appcrafttest.databinding.FragmentDetailBinding
 import com.jdeveloperapps.appcrafttest.databinding.FragmentListBinding
+import com.jdeveloperapps.appcrafttest.models.AlbumDetail
 import com.jdeveloperapps.appcrafttest.util.exhaustive
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 
 @AndroidEntryPoint
-class DetailFragment : Fragment(R.layout.fragment_detail) {
+class DetailFragment : Fragment(R.layout.fragment_detail), DetailAlbumAdapter.OnItemClickListener {
 
     private var _binding: FragmentDetailBinding? = null
     private val binding get() = _binding!!
 
     private val viewModel by viewModels<DetailViewModel>()
-    private val adapter = DetailAlbumAdapter()
+    private val adapter = DetailAlbumAdapter(this)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -58,6 +60,10 @@ class DetailFragment : Fragment(R.layout.fragment_detail) {
                     is DetailViewModel.DetailEvent.ShowSavedButton -> {
                         showSaveButton(event.visible)
                     }
+                    is DetailViewModel.DetailEvent.NavigateToImageZoom -> {
+                        val action = DetailFragmentDirections.actionGlobalImageZoomFragment(event.albumDetail)
+                        findNavController().navigate(action)
+                    }
                 }.exhaustive
             }
         }
@@ -75,6 +81,10 @@ class DetailFragment : Fragment(R.layout.fragment_detail) {
 
     private fun showMessage(message: String) {
         Snackbar.make(requireView(), message, Snackbar.LENGTH_LONG).show()
+    }
+
+    override fun onItemClick(albumDetail: AlbumDetail) {
+        viewModel.showImageZoom(albumDetail)
     }
 
     override fun onDestroy() {

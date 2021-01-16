@@ -8,9 +8,10 @@ import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.jdeveloperapps.appcrafttest.R
 import com.jdeveloperapps.appcrafttest.databinding.ItemDetailAlbumRecyclerBinding
+import com.jdeveloperapps.appcrafttest.models.Album
 import com.jdeveloperapps.appcrafttest.models.AlbumDetail
 
-class DetailAlbumAdapter() : ListAdapter<AlbumDetail, DetailAlbumAdapter.AlbumDetailViewHolder>(
+class DetailAlbumAdapter(private val listener: OnItemClickListener) : ListAdapter<AlbumDetail, DetailAlbumAdapter.AlbumDetailViewHolder>(
     DiffCallback()
 ) {
 
@@ -26,6 +27,16 @@ class DetailAlbumAdapter() : ListAdapter<AlbumDetail, DetailAlbumAdapter.AlbumDe
 
     inner class AlbumDetailViewHolder(private val binding: ItemDetailAlbumRecyclerBinding) :
         RecyclerView.ViewHolder(binding.root) {
+
+        init {
+            binding.root.setOnClickListener {
+                val position = adapterPosition
+                if (position != RecyclerView.NO_POSITION) {
+                    val albumDetail = getItem(position)
+                    listener.onItemClick(albumDetail)
+                }
+            }
+        }
 
         fun bind(albumDetail: AlbumDetail) {
             binding.apply {
@@ -46,5 +57,9 @@ class DetailAlbumAdapter() : ListAdapter<AlbumDetail, DetailAlbumAdapter.AlbumDe
         override fun areContentsTheSame(oldItem: AlbumDetail, newItem: AlbumDetail) =
             oldItem == newItem
 
+    }
+
+    interface OnItemClickListener {
+        fun onItemClick(albumDetail: AlbumDetail)
     }
 }

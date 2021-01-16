@@ -61,10 +61,15 @@ class DetailViewModel @ViewModelInject constructor(
         albumDao.deleteAlbum(album, listAlbum)
     }
 
+    fun showImageZoom(albumDetail: AlbumDetail) = viewModelScope.launch {
+        detailEventChannel.send(DetailEvent.NavigateToImageZoom(albumDetail))
+    }
+
     sealed class DetailEvent {
         data class ShowProgressBar(val visible: Boolean) : DetailEvent()
         data class ShowMessage(val message: String) : DetailEvent()
         data class ShowMessageSaved(val album: Album, val listAlbum: List<AlbumDetail>) : DetailEvent()
         data class ShowSavedButton(val visible: Boolean) : DetailEvent()
+        data class NavigateToImageZoom(val albumDetail: AlbumDetail) : DetailEvent()
     }
 }

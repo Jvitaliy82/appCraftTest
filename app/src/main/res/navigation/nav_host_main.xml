@@ -44,4 +44,14 @@
         android:id="@+id/action_global_locationFragment"
         app:destination="@id/locationFragment"
         app:launchSingleTop="true" />
+    <dialog
+        android:id="@+id/imageZoomFragment"
+        android:name="com.jdeveloperapps.appcrafttest.ui.fragments.dialogImageZoom.ImageZoomFragment"
+        android:label="image_zool_layout"
+        tools:layout="@layout/image_zool_layout" >
+        <argument
+            android:name="albumDetail"
+            app:argType="com.jdeveloperapps.appcrafttest.models.AlbumDetail" />
+    </dialog>
+    <action android:id="@+id/action_global_imageZoomFragment" app:destination="@id/imageZoomFragment" />
 </navigation>
