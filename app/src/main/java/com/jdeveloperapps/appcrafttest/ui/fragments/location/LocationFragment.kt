@@ -2,12 +2,10 @@ package com.jdeveloperapps.appcrafttest.ui.fragments.location
 
 import android.Manifest
 import android.content.Intent
-import android.location.Location
 import android.os.Build
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import com.jdeveloperapps.appcrafttest.R
 import com.jdeveloperapps.appcrafttest.databinding.FragmentLocationBinding
 import com.jdeveloperapps.appcrafttest.services.TrackingService
@@ -34,8 +32,7 @@ class LocationFragment : Fragment(R.layout.fragment_location), EasyPermissions.P
 
         binding.apply {
             button_start_stop.setOnClickListener {
-                requestPermissions()
-                toggleStartStop()
+                starStopLocation()
             }
         }
 
@@ -48,6 +45,14 @@ class LocationFragment : Fragment(R.layout.fragment_location), EasyPermissions.P
         }
         TrackingService.userLocation.observe(viewLifecycleOwner) {
             binding.textLocation.text = String.format("lat:%s long:%s", it.latitude, it.longitude)
+        }
+    }
+
+    private fun starStopLocation() {
+        if (TrackingUtility.hasLocationPermission(requireContext())) {
+            toggleStartStop()
+        } else {
+            requestPermissions()
         }
     }
 
@@ -98,7 +103,9 @@ class LocationFragment : Fragment(R.layout.fragment_location), EasyPermissions.P
         }
     }
 
-    override fun onPermissionsGranted(requestCode: Int, perms: MutableList<String>) {}
+    override fun onPermissionsGranted(requestCode: Int, perms: MutableList<String>) {
+        starStopLocation()
+    }
 
     override fun onPermissionsDenied(requestCode: Int, perms: MutableList<String>) {
         if (EasyPermissions.somePermissionPermanentlyDenied(this, perms)) {
