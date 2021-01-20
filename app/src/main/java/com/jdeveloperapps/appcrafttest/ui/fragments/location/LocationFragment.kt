@@ -1,7 +1,9 @@
 package com.jdeveloperapps.appcrafttest.ui.fragments.location
 
 import android.Manifest
+import android.content.Context
 import android.content.Intent
+import android.location.LocationManager
 import android.os.Build
 import android.os.Bundle
 import android.view.View
@@ -24,7 +26,7 @@ class LocationFragment : Fragment(R.layout.fragment_location), EasyPermissions.P
     private var isTracking = false
 
     private var _binding: FragmentLocationBinding? = null
-    val binding get() = _binding!!
+    private val binding get() = _binding!!
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -50,6 +52,9 @@ class LocationFragment : Fragment(R.layout.fragment_location), EasyPermissions.P
 
     private fun starStopLocation() {
         if (TrackingUtility.hasLocationPermission(requireContext())) {
+            if (isGeoDisabled()) {
+                startActivity(Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS))
+            }
             toggleStartStop()
         } else {
             requestPermissions()
@@ -78,6 +83,11 @@ class LocationFragment : Fragment(R.layout.fragment_location), EasyPermissions.P
             it.action = action
             requireContext().startService(it)
         }
+
+    private fun isGeoDisabled() : Boolean {
+        val locationManager = requireContext().getSystemService(Context.LOCATION_SERVICE) as LocationManager
+        return !locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
+    }
 
     private fun requestPermissions() {
         if (TrackingUtility.hasLocationPermission(requireContext())) {
